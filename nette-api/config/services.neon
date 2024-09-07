@@ -1,0 +1,9 @@
+services:
+	- App\Core\RouterFactory::createRouter
+	- App\Models\PetModel(./../data/pets.xml)
+
+search:
+	-	in: %appDir%
+		classes:
+			- *Factory
+			- *Facade

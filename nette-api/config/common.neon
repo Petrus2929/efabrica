@@ -1,0 +1,41 @@
+parameters:
+
+
+application:
+    errorPresenter:
+        4xx: Error:Error4xx
+        5xx: Error:Error5xx
+    mapping:
+        *: App\UI\*\**Presenter
+        Api: Tomaj\NetteApi\Presenters\*Presenter
+
+services:
+  - Tomaj\NetteApi\Link\ApiLink
+  - Tomaj\NetteApi\Misc\IpDetector
+  apiDecider:
+    factory: Tomaj\NetteApi\ApiDecider
+    setup:
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('GET', 1, 'pets'), \App\Api\v1\Handlers\PetsListingHandler(), \Tomaj\NetteApi\Authorization\NoAuthorization())
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('GET', 1, 'pet', 'findByStatus'), \App\Api\v1\Handlers\PetsListingHandlerByStatus(), \Tomaj\NetteApi\Authorization\NoAuthorization())
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('GET', 1, 'pet'), \App\Api\v1\Handlers\PetsListingHandlerById(), \Tomaj\NetteApi\Authorization\NoAuthorization())        
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('POST', 1, 'pet'), \App\Api\v1\Handlers\PetsCreateHandler(), \Tomaj\NetteApi\Authorization\NoAuthorization())
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('DELETE', 1, 'pet'), \App\Api\v1\Handlers\PetsDeleteHandler(), \Tomaj\NetteApi\Authorization\NoAuthorization())
+        - addApi(\Tomaj\NetteApi\EndpointIdentifier('PUT', 1, 'pet'), \App\Api\v1\Handlers\PetsUpdateHandler(), \Tomaj\NetteApi\Authorization\NoAuthorization())
+database:
+    dsn: 'sqlite::memory:'
+    user:
+    password:
+
+
+latte:
+    strictTypes: yes
+    strictParsing: yes
+    extensions:
+        - App\UI\Accessory\LatteExtension
+
+
+di:
+    export:
+        parameters: no
+        tags: no
+

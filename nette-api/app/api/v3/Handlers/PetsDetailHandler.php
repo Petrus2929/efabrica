@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Api\V1\Handlers;
+namespace App\Api\V3\Handlers;
 
 use Nette\Http\Response;
 use Tomaj\NetteApi\Handlers\BaseHandler;
-use Tomaj\NetteApi\Params\PostInputParam;
+use Tomaj\NetteApi\Params\GetInputParam;
 use Tomaj\NetteApi\Response\JsonApiResponse;
 use Tomaj\NetteApi\Response\ResponseInterface;
 use App\Models\PetModel;
 
-class PetsCreateHandler extends BaseHandler
+class PetsDetailHandler extends BaseHandler
 {
+
     public function __construct(private PetModel $petModel)
     {
         parent::__construct();
@@ -19,21 +20,18 @@ class PetsCreateHandler extends BaseHandler
     public function params(): array
     {
         return [
-            //(new PostInputParam('id'))->setRequired(),
-            (new PostInputParam('name'))->setRequired(),
-            (new PostInputParam('category'))->setRequired(),
-            (new PostInputParam('status'))->setRequired(),
+            (new GetInputParam('id'))->setRequired(),
         ];
     }
 
     public function handle(array $params): ResponseInterface
     {
 
-        // vlozi nove zvieratko do xml
-        $pets = $this->petModel->createPet($params);
+        // loads pets from XML by id
+        $pet = $this->petModel->getPet($params['id']);
 
         // Vytvorenie JSON odpovede so statusom 200 OK
-        $response = new JsonApiResponse(Response::S200_OK, $pets);
+        $response = new JsonApiResponse(Response::S200_OK, $pet);
         return $response;
     }
 

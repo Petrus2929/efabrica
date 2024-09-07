@@ -5,21 +5,26 @@ namespace App\Models;
 use App\Models\Pet;
 use SimpleXMLElement;
 
+/**
+ * Model to work with pets
+ */
 class PetModel
 {
-
     private $configFile = './../data/config.json';
     private $config = null;
     protected $entityName = null;
     protected $entityItemName = null;
-
+    
+    /**
+    * @param string $filePath
+    */
     public function __construct(private string $filePath)
     {
         $this->loadConfig();
     }
     /**
-     * List of Pets
-     * @return Pet[]
+     * function returns list of ALL pets
+     * @return array
      */
     public function getPets(): array
     {
@@ -44,25 +49,30 @@ class PetModel
     }
 
     /**
-     * load configuration
+     * load configuration data
      * @return void
      */
-    private function loadConfig() {
+    private function loadConfig(): void
+    {
         $confFileContent = file_get_contents($this->configFile);
         $this->config = json_decode($confFileContent);
         $this->entityName = $this->config->entityName;
-        $this->entityItemName = $this->config->entityItemName;    
+        $this->entityItemName = $this->config->entityItemName;
     }
-    
-    private function saveConfig() {
+    /**
+     * Summary of saveConfig
+     * @return void
+     */
+    private function saveConfig(): void
+    {
         file_put_contents($this->configFile, json_encode($this->config));
     }
-
     /**
-     * List of Pets by status
-     * @return Pet[]
+     * function return pets by selected status
+     * @param string $status
+     * @return array
      */
-    public function getPetsByStatus(string $status ): array
+    public function getPetsByStatus(string $status): array
     {
         $pets = $this->getPets();
         $petsArray = [];
@@ -74,22 +84,33 @@ class PetModel
         }
         return $petsArray;
     }
-
-    public function getLastID()
+    /**
+     * function returns used pet's ID
+     * @return mixed
+     */
+    public function getLastID() :string
     {
         return $this->config->lastId;
     }
-
-    public function setLastID($newLastID)
+    /**
+     *function sets new last ID
+     * @param mixed $newLastID
+     * @return void
+     */
+    public function setLastID(mixed $newLastID):void
     {
         $this->config->lastId = $newLastID;
-        $this->saveConfig();    
+        $this->saveConfig();
     }
-
-    public function getPet($id)
+    /**
+     * function returns pet with all attributes in array by his ID
+     * @param string $id
+     * @return array
+     */
+    public function getPet(string $id): array
     {
 
-        $petByID = null;  
+        $petByID = null;
         $pets = $this->getPets();
 
         foreach ($pets as $pet) {
@@ -101,12 +122,12 @@ class PetModel
         return $petByID;
     }
 
-    public function createPet(array $petData)
+    public function createPet(array $petData): void
     {
-        $this->setLastID($this->getLastID()+1);
+        $this->setLastID($this->getLastID() + 1);
 
         $petData['id'] = $this->getLastID();
-        
+
         //load existing xml file with pets
         $xml = simplexml_load_file($this->filePath);
 
@@ -114,9 +135,6 @@ class PetModel
 
         //save updated xml file with new pet
         $xml->asXML($this->filePath);
-
-        return $petData;
-
     }
 
     public function addPet(&$xml, $petData)
@@ -132,30 +150,30 @@ class PetModel
 
     }
 
-    public function deletePet($id)
+    public function deletePet($id): void
     {
-        $xml2 = new SimpleXMLElement('<'.$this->entityName.'></'.$this->entityName.'>');
+        $xml = new SimpleXMLElement('<' . $this->entityName . '></' . $this->entityName . '>');
 
         $existingPets = $this->getPets();
 
         // Nájdi element, ktorý zodpovedá danému ID a zmaž ho
         foreach ($existingPets as $pet) {
             if ($pet['id'] !== $id) {
-                $this->addPet($xml2, $pet);
+                $this->addPet($xml, $pet);
             }
         }
 
         // Ulož aktualizovaný XML súbor
-        $xml2->asXML($this->filePath);
+        $xml->asXML($this->filePath);
 
-        return $this->getPets();
+
     }
 
 
     public function updatePet(array $petData)
     {
         $id = $petData['id'];
-        $xml2 = new SimpleXMLElement('<'.$this->entityName.'></'.$this->entityName.'>');
+        $xml2 = new SimpleXMLElement('<' . $this->entityName . '></' . $this->entityName . '>');
 
         $existingPets = $this->getPets();
 

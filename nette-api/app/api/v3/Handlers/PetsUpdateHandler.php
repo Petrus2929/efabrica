@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Api\V1\Handlers;
+namespace App\Api\V3\Handlers;
 
 use Nette\Http\Response;
 use Tomaj\NetteApi\Handlers\BaseHandler;
 use Tomaj\NetteApi\Params\JsonInputParam;
-use Tomaj\NetteApi\Params\PostInputParam;
-use Tomaj\NetteApi\Params\RawInputParam;
 use Tomaj\NetteApi\Response\JsonApiResponse;
 use Tomaj\NetteApi\Response\ResponseInterface;
 use App\Models\PetModel;
@@ -24,10 +22,7 @@ class PetsUpdateHandler extends BaseHandler
         $schema = '{
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "number"
-                  },                
-              "name": {
+             "name": {
                 "type": "string"
               },
               "category": {
@@ -39,14 +34,14 @@ class PetsUpdateHandler extends BaseHandler
             }
           }';
 
+        // po zvalidovani json objektu z body requestu  vrati pole v ktorom je pod klucom 'arrayOfJsonParsedValues' pole z rozparsovanych udajov z json_decode(body raw data)
         return [
-            (new JsonInputParam('arrayOfJsonParsedValues',  $schema)),
+            (new JsonInputParam('arrayOfJsonParsedValues', $schema)),
         ];
     }
 
     public function handle(array $params): ResponseInterface
     {
-        //var_dump($params['xx']);
         // update pet in xml
         $pets = $this->petModel->updatePet($params['arrayOfJsonParsedValues']);
 

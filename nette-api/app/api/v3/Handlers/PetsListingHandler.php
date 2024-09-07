@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Api\V1\Handlers;
+namespace App\Api\V3\Handlers;
 
 use Nette\Http\Response;
 use Tomaj\NetteApi\Handlers\BaseHandler;

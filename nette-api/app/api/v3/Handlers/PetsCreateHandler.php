@@ -40,7 +40,7 @@ class PetsCreateHandler extends BaseHandler
     if ($image && $image->isOk() && $image->isImage()) {
 
       //file path to upload dir
-      $uploadDir = './../data/uploads';
+      $uploadDir = './../data/uploads/';
       $filePath = $uploadDir . '/' . $image->getSanitizedName();
 
       //move file 

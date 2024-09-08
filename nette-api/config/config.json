@@ -1,1 +1,1 @@
-{"lastId":116,"appName":"restAPI","entityName":"pets","entityItemName":"pet","schema":{"type":"object","properties":{"id":{"type":"number"},"name":{"type":"string"},"category":{"type":"string"},"status":{"type":"string"}}}}
+{"lastId":123,"appName":"restAPI","entityName":"pets","entityItemName":"pet","schema":{"type":"object","properties":{"id":{"type":"number"},"name":{"type":"string"},"category":{"type":"string"},"status":{"type":"string"}}}}

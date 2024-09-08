@@ -73,8 +73,7 @@ function PetList() {
           {pets.map((pet) => (
             <Col md={4} key={pet.id}>
               <Card className="mb-4">
-          
-                <Card.Body>
+                  <Card.Body>
                   <Card.Title>{pet.name}</Card.Title>
                   <Card.Text>
                     <strong>ID:</strong> {pet.id}<br />

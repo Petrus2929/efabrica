@@ -27,8 +27,8 @@ final class RouterFactory
 			],
 		]);
 		$router[] = new Route('/api/v<version>/<package>[/<apiAction>][/<params>]', 'Api:Api:default');
-	
-		$router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
+	    $router->addRoute('<presenter>/<action>[/<id>]', 'Home:default');
+		
 		return $router;
 	}
 }

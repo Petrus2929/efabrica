@@ -27,13 +27,14 @@ function EditPet() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    e.preventDefault(); 
     fetch(`http://localhost:8000/api/v3/pet/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(formData),
+     
     })
       .then(() => {
         navigate('/');

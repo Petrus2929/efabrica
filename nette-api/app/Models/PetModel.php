@@ -10,14 +10,33 @@ use SimpleXMLElement;
  */
 class PetModel
 {
-    private $configFile = './../data/config.json';
-    private $config = null;
-    protected $entityName = null;
-    protected $entityItemName = null;
-    
     /**
-    * @param string $filePath
-    */
+     * path to config file
+     * @var string
+     */
+    private $configFile = './../config/config.json';
+
+    /**
+     * Config data
+     * @var string
+     */
+    private $config = null;
+
+    /**
+     * name of entity - "pets"
+     * @var string
+     */
+    protected $entityName = null;
+
+    /**
+     * name of entity item - pet
+     * @var string
+     */
+    protected $entityItemName = null;
+
+    /**
+     * @param string $filePath - "database" of pets
+     */
     public function __construct(private string $filePath)
     {
         $this->loadConfig();
@@ -41,7 +60,8 @@ class PetModel
                 'id' => (string) $pet->id,
                 'name' => (string) $pet->name,
                 'category' => (string) $pet->category,
-                'status' => (string) $pet->status
+                'status' => (string) $pet->status,
+                'imagePath' => (string) $pet->imagePath
             ];
         }
 
@@ -88,7 +108,7 @@ class PetModel
      * function returns used pet's ID
      * @return mixed
      */
-    public function getLastID() :string
+    public function getLastID(): string
     {
         return $this->config->lastId;
     }
@@ -97,7 +117,7 @@ class PetModel
      * @param mixed $newLastID
      * @return void
      */
-    public function setLastID(mixed $newLastID):void
+    public function setLastID(mixed $newLastID): void
     {
         $this->config->lastId = $newLastID;
         $this->saveConfig();
@@ -121,9 +141,13 @@ class PetModel
 
         return $petByID;
     }
-
+    /**
+     * function creates a new pet
+     * @param array $petData
+     * @return void
+     */
     public function createPet(array $petData): void
-    {
+    { 
         $this->setLastID($this->getLastID() + 1);
 
         $petData['id'] = $this->getLastID();
@@ -137,58 +161,72 @@ class PetModel
         $xml->asXML($this->filePath);
     }
 
-    public function addPet(&$xml, $petData)
+    /**
+     * function adds pet to xml
+     * @param SimpleXMLElement $xml
+     * @param array $petData
+     * @return void
+     */
+    public function addPet(SimpleXMLElement &$xml, array $petData): void
     {
-
-        // Pridanie nového elementu <pet>
         $newPet = $xml->addChild($this->entityItemName);
-        $newPet->addChild('id', $petData['id']);  // ID nového zvieratka
-        $newPet->addChild('name', $petData['name']);  // Meno nového zvieratka
-        $newPet->addChild('category', $petData['category']);  // Kategória (typ) nového zvieratka
-        $newPet->addChild('status', $petData['status']);  // Status nového zvieratka
+        $newPet->addChild('id', $petData['id']);
+        $newPet->addChild('name', $petData['name']);
+        $newPet->addChild('category', $petData['category']);
+        $newPet->addChild('status', $petData['status']);
 
-
+        //if this function is called from create pet - data from form
+        if (isset($petData['file'])) {
+            $newPet->addChild('imagePath', $petData['file']['full_path']);
+        }
+         //if this function is called from delete pet - data from xml
+        if (isset($petData['imagePath'])) {
+            $newPet->addChild('imagePath', $petData['imagePath']);
+        }
+        
     }
 
-    public function deletePet($id): void
+    /**
+     * function deletes pet
+     * @param string $id
+     * @return void
+     */
+    public function deletePet(string $id): void
     {
         $xml = new SimpleXMLElement('<' . $this->entityName . '></' . $this->entityName . '>');
 
         $existingPets = $this->getPets();
 
-        // Nájdi element, ktorý zodpovedá danému ID a zmaž ho
         foreach ($existingPets as $pet) {
             if ($pet['id'] !== $id) {
                 $this->addPet($xml, $pet);
             }
         }
 
-        // Ulož aktualizovaný XML súbor
+        //save changeg XML
         $xml->asXML($this->filePath);
-
-
     }
 
-
-    public function updatePet(array $petData)
+    /**
+     * function apdates pet
+     * @param array $petData
+     * @return array
+     */
+    public function updatePet(array $petData): void
     {
         $id = $petData['id'];
-        $xml2 = new SimpleXMLElement('<' . $this->entityName . '></' . $this->entityName . '>');
+        $xml = new SimpleXMLElement('<' . $this->entityName . '></' . $this->entityName . '>');
 
         $existingPets = $this->getPets();
 
-        // Nájdi element, ktorý zodpovedá danému ID a zmaž ho
         foreach ($existingPets as $pet) {
             if ($pet['id'] == $id) {
                 $pet = $petData;
             }
-            $this->addPet($xml2, $pet);
+            $this->addPet($xml, $pet);
         }
 
-        // Ulož aktualizovaný XML súbor
-        $xml2->asXML($this->filePath);
-
-        return $this->getPets();
+        $xml->asXML($this->filePath);
     }
 
 }

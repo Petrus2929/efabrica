@@ -9,6 +9,7 @@ function AddPet() {
     status: '',
     category: '',
   });
+  const [image, setImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,18 +19,28 @@ function AddPet() {
     }));
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const data = new FormData();
+    data.append('name', formData.name);
+    data.append('status', formData.status);
+    data.append('category', formData.category);
+    if (image) {
+      data.append('file', image);
+    }
+
     fetch('http://localhost:8000/api/v3/pet', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData)
-
+      body: data
     })
       .then(() => {
-        navigate('/'); // Po úspešnom pridaní zvieratka sa vráť späť na hlavnú stránku
+        navigate('/');
       })
       .catch((error) => console.error('Error adding pet:', error));
   };
@@ -68,6 +79,16 @@ function AddPet() {
             value={formData.category}
             onChange={handleChange}
             required
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>Image</Form.Label>
+          <Form.Control
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
           />
         </Form.Group>
 

@@ -27,10 +27,10 @@ class PetsDetailHandler extends BaseHandler
     public function handle(array $params): ResponseInterface
     {
 
-        // loads pets from XML by id
+        //loads pets from XML by id
         $pet = $this->petModel->getPet($params['id']);
 
-        // Vytvorenie JSON odpovede so statusom 200 OK
+        //send response
         $response = new JsonApiResponse(Response::S200_OK, $pet);
         return $response;
     }

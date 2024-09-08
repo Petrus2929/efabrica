@@ -11,15 +11,15 @@ use App\Models\PetModel;
 
 class PetsUpdateHandler extends BaseHandler
 {
-    public function __construct(private PetModel $petModel)
-    {
-        parent::__construct();
-    }
+  public function __construct(private PetModel $petModel)
+  {
+    parent::__construct();
+  }
 
 
-    public function params(): array
-    {
-        $schema = '{
+  public function params(): array
+  {
+    $schema = '{
             "type": "object",
             "properties": {
              "name": {
@@ -34,20 +34,19 @@ class PetsUpdateHandler extends BaseHandler
             }
           }';
 
-        // po zvalidovani json objektu z body requestu  vrati pole v ktorom je pod klucom 'arrayOfJsonParsedValues' pole z rozparsovanych udajov z json_decode(body raw data)
-        return [
-            (new JsonInputParam('arrayOfJsonParsedValues', $schema)),
-        ];
-    }
+    return [
+      (new JsonInputParam('arrayOfJsonParsedValues', $schema)),
+    ];
+  }
 
-    public function handle(array $params): ResponseInterface
-    {
-        // update pet in xml
-        $pets = $this->petModel->updatePet($params['arrayOfJsonParsedValues']);
+  public function handle(array $params): ResponseInterface
+  {
+    //update pet in xml
+    $this->petModel->updatePet($params['arrayOfJsonParsedValues']);
 
-        // Vytvorenie JSON odpovede so statusom 200 OK
-        $response = new JsonApiResponse(Response::S200_OK, $this->petModel->getPet($params['arrayOfJsonParsedValues']['id']));
-        return $response;
-    }
+    //send response
+    $response = new JsonApiResponse(Response::S200_OK, 'Pet is updated');
+    return $response;
+  }
 
 }

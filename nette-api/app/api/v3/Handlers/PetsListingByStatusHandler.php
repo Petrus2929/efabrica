@@ -29,7 +29,7 @@ class PetsListingByStatusHandler extends BaseHandler
         // loads pets from XML by status
         $pets = $this->petModel->getPetsByStatus($params['status']);
 
-        // Vytvorenie JSON odpovede so statusom 200 OK
+        // send response
         $response = new JsonApiResponse(Response::S200_OK, $pets);
         return $response;
     }

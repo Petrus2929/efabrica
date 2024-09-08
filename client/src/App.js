@@ -4,7 +4,9 @@ import PetList from './components/PetList';
 import PetDetail from './components/PetDetail';
 import EditPet from './components/EditPet';
 import AddPet from './components/AddPet';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { Navbar, Container, Nav, Row, Col } from 'react-bootstrap';
+import petImage from './assets/pet_shop.jpeg';
+import Footer from './Footer'; 
 
 function App() {
   return (
@@ -16,6 +18,11 @@ function App() {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/add">Add Pet</Nav.Link>
           </Nav>
+          <Row className="justify-content-right">
+            <Col className="text-center">
+              <img src={petImage} alt="Pet" style={{ maxWidth: '30%', height: 'auto' }} />
+            </Col>
+          </Row>
         </Container>
       </Navbar>
 
@@ -27,6 +34,7 @@ function App() {
           <Route path="/add" element={<AddPet />} />
         </Routes>
       </Container>
+      <Footer /> 
     </Router>
   );
 }

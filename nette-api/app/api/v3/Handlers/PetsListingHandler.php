@@ -17,10 +17,10 @@ class PetsListingHandler extends BaseHandler
 
     public function handle(array $params): ResponseInterface
     {
-        // Načíta zvieratká z XML
+        //load pets from xml
         $pets = $this->petModel->getPets();
 
-        // Vytvorenie JSON odpovede so statusom 200 OK
+        //send response
         $response = new JsonApiResponse(Response::S200_OK, $pets);
         return $response;
     }

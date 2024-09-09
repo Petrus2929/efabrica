@@ -28,7 +28,7 @@ class PetsDetailHandler extends BaseHandler
     {
 
         //loads pets from XML by id
-        $pet = $this->petModel->getPet($params['id']);
+        $pet = $this->petModel->get($params['id']);
 
         //send response
         $response = new JsonApiResponse(Response::S200_OK, $pet);

@@ -14,7 +14,7 @@ final class HomePresenter extends Nette\Application\UI\Presenter
     {
         $filePath = '../data/uploads/' . $image;
 
-        if (file_exists($filePath)) {
+        if (file_exists($filePath) && is_file($filePath)) {
             $this->sendResponse(new FileResponse($filePath));
         } else {
             $this->sendResponse(new FileResponse('../data/uploads/' . 'default.jpeg'));

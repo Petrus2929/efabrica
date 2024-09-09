@@ -26,7 +26,7 @@ class PetsDeleteHandler extends BaseHandler
     {
 
         // vymaze zvieratko z XML
-        $this->petModel->deletePet($params['id']);
+        $this->petModel->delete($params['id']);
 
         // send response
         $response = new JsonApiResponse(Response::S200_OK, 'Pet is deleted');

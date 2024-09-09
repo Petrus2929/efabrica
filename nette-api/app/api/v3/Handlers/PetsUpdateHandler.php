@@ -19,20 +19,8 @@ class PetsUpdateHandler extends BaseHandler
 
   public function params(): array
   {
-    $schema = '{
-            "type": "object",
-            "properties": {
-             "name": {
-                "type": "string"
-              },
-              "category": {
-                "type": "string"
-              },
-              "status": {
-                "type": "string"
-              }              
-            }
-          }';
+
+    $schema = $this->petModel->getSchema();
 
     return [
       (new JsonInputParam('arrayOfJsonParsedValues', $schema)),
@@ -42,7 +30,7 @@ class PetsUpdateHandler extends BaseHandler
   public function handle(array $params): ResponseInterface
   {
     //update pet in xml
-    $this->petModel->updatePet($params['arrayOfJsonParsedValues']);
+    $this->petModel->update($params['arrayOfJsonParsedValues']);
 
     //send response
     $response = new JsonApiResponse(Response::S200_OK, 'Pet is updated');

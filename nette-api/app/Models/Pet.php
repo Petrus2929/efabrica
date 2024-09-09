@@ -21,36 +21,62 @@ class Pet
      */
     private $category;
 
+    /**
+     * Status
+     * @var string
+     */
     private $status;
 
+    /**
+     * ImageName
+     * @var string
+     */
     private $imageName;
 
+    /**
+     * @return string
+     */
     public function getId() :string
     {
         return $this->id;
     }
-
+    /**
+     * 
+     * @return string
+     */
     public function getName() :string
     {
         return $this->name;
     }
-
+    /**
+     * 
+     * @return string
+     */
     public function getCategory() :string
     {
         return $this->category;
     }
 
-    
+    /**
+     * @return string
+     */
     public function getStatus() :string
     {
         return $this->status;
     }
 
+    /**
+     * @return string
+     */
     public function getImageName() :string
     {
         return $this->imageName;
     }
-
+    /**
+     * create Pet object from array
+     * @param array $data
+     * @return Pet
+     */
     public static function createFromArray(array $data): self
     {
         $pet = new self();

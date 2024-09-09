@@ -6,7 +6,6 @@ use Nette\Http\FileUpload;
 use Nette\Http\Response;
 use Tomaj\NetteApi\Handlers\BaseHandler;
 use Tomaj\NetteApi\Params\FileInputParam;
-use Tomaj\NetteApi\Params\JsonInputParam;
 use Tomaj\NetteApi\Params\PostInputParam;
 use Tomaj\NetteApi\Response\JsonApiResponse;
 use Tomaj\NetteApi\Response\ResponseInterface;
@@ -48,7 +47,7 @@ class PetsCreateHandler extends BaseHandler
     }
 
      //create new pet in xml
-     $this->petModel->createPet($params);
+     $this->petModel->create($params);
 
     //send response
     $response = new JsonApiResponse(Response::S200_OK, 'Pet is created');

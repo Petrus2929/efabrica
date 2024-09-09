@@ -18,7 +18,7 @@ class PetsListingHandler extends BaseHandler
     public function handle(array $params): ResponseInterface
     {
         //load pets from xml
-        $pets = $this->petModel->getPets();
+        $pets = $this->petModel->getAll();
 
         //send response
         $response = new JsonApiResponse(Response::S200_OK, $pets);

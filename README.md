@@ -8,8 +8,16 @@ a naposledy použité ID-čko si zapisujem do konfiguračného súboru /config/c
 API endpointy som vytvoril presne podľa volaní definovaných na https://petstore3.swagger.io. Ku každému API volaniu som vytvoril príslušné Handlery, ktoré som definoval v konfiguračnom súbore common.neon. 
 V konfiguračnom súbore common.neon som zaregistroval aj ApiPresenter, ktorý je použivaný balíčkom tomaj/nette-api. Okrem spomínaných vecí som v common.neon súbore musel povoliť to, 
 aby bolo možné tieto endpointy možné volať ajaxovo z reactu - enableGlobalPreflight().
-Obrázky jednotlivých zvieratiek ukladám do /data/uploads/. 
-Všetky funkcie na ukladanie, editovanie, mazanie a zobrazovanie zvieratok na strane nette robí model PetModel, ktorý je volaný z jednotlivých handlerov podľa potreby.
+Obrázky jednotlivých zvieratiek ukladám do /data/uploads/. Samozrejmosťou je aj fyzické mazanie z tohto priečinka pri zmazaní záznamu zvieratka.
+Na zobrazenie obrázkov pri detaile zvieratka na strane reactu som použil volanie Home presentera a jeho metódu show: 'http://localhost:8000/home/show?image=${pet.imageName}'
+Všetky funkcie na ukladanie, editovanie, mazanie a zobrazovanie zvieratok na strane nette robí model PetModel, ktorý je volaný z jednotlivých handlerov podľa potreby. PetModel dedí od
+EntityModel, ktorý je abstraktnou triedou a definuje základné metódy, ktoré by mal podediť každý potomok a načítava dáta z konfigov.
+Pre pridanie nového atribútu zvieratka ako napríklad 'age' je potrebné vykonať tieto kroky:
+1. pridanie atribútu 'age' a zadefinovanie getAge() metódy v triede Pet.php
+2. pridanie atribútu 'age' do metódy createFromArray() v triede Pet.php
+3. pridanie atribútu 'age' do metód create() a getAll() v triede PetModel.php
+4. pridanie 'age' do triedy PetsCreateHandler.php ako nový PostInputParam
+5. pridanie 'age' atribútu do súboru config/config.json, aby ho vedel updatnúť PetsUpdateHandler.php
 
 ## Postup k inicializácii projektu a spusteniu aplikácie:
 ### 1. git clone https://github.com/Petrus2929/efabrica.git

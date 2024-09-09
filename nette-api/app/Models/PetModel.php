@@ -34,10 +34,12 @@ class PetModel
      */
     protected $entityItemName = null;
 
+    public $uploadDir = null;
+
     /**
-     * @param string $filePath - "database" of pets
+     * @param string $filePathXML - file path to "database" of pets
      */
-    public function __construct(private string $filePath)
+    public function __construct(private string $filePathXML)
     {
         $this->loadConfig();
     }
@@ -48,11 +50,11 @@ class PetModel
     public function getPets(): array
     {
 
-        if (!file_exists($this->filePath)) {
+        if (!file_exists($this->filePathXML)) {
             return [];
         }
 
-        $xml = simplexml_load_file($this->filePath);
+        $xml = simplexml_load_file($this->filePathXML);
         $petsArray = [];
 
         foreach ($xml->children() as $pet) {
@@ -61,7 +63,7 @@ class PetModel
                 'name' => (string) $pet->name,
                 'category' => (string) $pet->category,
                 'status' => (string) $pet->status,
-                'imagePath' => (string) $pet->imagePath
+                'imageName' => (string) $pet->imageName
             ];
         }
 
@@ -78,6 +80,7 @@ class PetModel
         $this->config = json_decode($confFileContent);
         $this->entityName = $this->config->entityName;
         $this->entityItemName = $this->config->entityItemName;
+        $this->uploadDir = $this->config->uploadDir;
     }
     /**
      * Summary of saveConfig
@@ -147,43 +150,40 @@ class PetModel
      * @return void
      */
     public function createPet(array $petData): void
-    { 
+    {
         $this->setLastID($this->getLastID() + 1);
 
         $petData['id'] = $this->getLastID();
 
         //load existing xml file with pets
-        $xml = simplexml_load_file($this->filePath);
+        $xml = simplexml_load_file($this->filePathXML);
 
-        $this->addPet($xml, $petData);
+        $this->addPetElement($xml, $petData);
 
         //save updated xml file with new pet
-        $xml->asXML($this->filePath);
+        $xml->asXML($this->filePathXML);
     }
 
     /**
-     * function adds pet to xml
+     * function adds pet element to xml
      * @param SimpleXMLElement $xml
      * @param array $petData
      * @return void
      */
-    public function addPet(SimpleXMLElement &$xml, array $petData): void
+    public function addPetElement(SimpleXMLElement &$xml, array $petData): void
     {
+        $pet = Pet::createFromArray($petData);
         $newPet = $xml->addChild($this->entityItemName);
-        $newPet->addChild('id', $petData['id']);
-        $newPet->addChild('name', $petData['name']);
-        $newPet->addChild('category', $petData['category']);
-        $newPet->addChild('status', $petData['status']);
+        $newPet->addChild('id', $pet->getId());
+        $newPet->addChild('name', $pet->getName());
+        $newPet->addChild('category', $pet->getCategory());
+        $newPet->addChild('status', $pet->getStatus());
 
-        //if this function is called from create pet - data from form
-        if (isset($petData['file'])) {
-            $newPet->addChild('imagePath', $petData['file']['full_path']);
+        $a = $pet->getImageName();
+        if (isset($a)) {
+            $newPet->addChild('imageName', $pet->getImageName());
         }
-         //if this function is called from delete pet - data from xml
-        if (isset($petData['imagePath'])) {
-            $newPet->addChild('imagePath', $petData['imagePath']);
-        }
-        
+
     }
 
     /**
@@ -199,16 +199,18 @@ class PetModel
 
         foreach ($existingPets as $pet) {
             if ($pet['id'] !== $id) {
-                $this->addPet($xml, $pet);
+                $this->addPetElement($xml, $pet);
+            } else {
+                unlink($this->uploadDir . $pet['imageName']);
             }
         }
 
-        //save changeg XML
-        $xml->asXML($this->filePath);
+        //save changed XML
+        $xml->asXML($this->filePathXML);
     }
 
     /**
-     * function apdates pet
+     * function updates pet
      * @param array $petData
      * @return array
      */
@@ -223,10 +225,10 @@ class PetModel
             if ($pet['id'] == $id) {
                 $pet = $petData;
             }
-            $this->addPet($xml, $pet);
+            $this->addPetElement($xml, $pet);
         }
 
-        $xml->asXML($this->filePath);
+        $xml->asXML($this->filePathXML);
     }
 
 }

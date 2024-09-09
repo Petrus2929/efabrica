@@ -18,7 +18,6 @@ final class HomePresenter extends Nette\Application\UI\Presenter
             $this->sendResponse(new FileResponse($filePath));
         } else {
             $this->sendResponse(new FileResponse('../data/uploads/' . 'default.jpeg'));
-            //$this->error('File not found', 404);
         }
     }
 }

@@ -35,7 +35,7 @@ function PetDetail() {
 
           <Col md={6}>
             <Card.Img
-              src={`http://localhost:8000/home/show?image=${pet.imagePath}`}
+              src={`http://localhost:8000/home/show?image=${pet.imageName}`}
               style={{ maxHeight: '200px', maxWidth: '200px', objectFit: 'cover' }}
             />
           </Col>

@@ -4,13 +4,26 @@ namespace App\Models;
 
 class Pet
 {
-
+    /**
+     * ID
+     * @var string
+     */
     private $id;
+    /**
+     * Name
+     * @var string
+     */
     private $name;
 
+    /**
+     * Category
+     * @var string
+     */
     private $category;
 
     private $status;
+
+    private $imageName;
 
     public function getId() :string
     {
@@ -33,6 +46,11 @@ class Pet
         return $this->status;
     }
 
+    public function getImageName() :string
+    {
+        return $this->imageName;
+    }
+
     public static function createFromArray(array $data): self
     {
         $pet = new self();
@@ -40,10 +58,8 @@ class Pet
         $pet->name = $data['name'];
         $pet->category = $data['category'];
         $pet->status = $data['status'];
+        $pet->imageName = $data['imageName']?? '';
 
         return $pet;
     }
-
-
-
 }

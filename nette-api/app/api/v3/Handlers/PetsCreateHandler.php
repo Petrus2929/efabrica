@@ -31,21 +31,24 @@ class PetsCreateHandler extends BaseHandler
 
   public function handle(array $params): ResponseInterface
   {
+     $image = new FileUpload($params['file']);
 
-    //create new pet in xml
-    $this->petModel->createPet($params);
-   
-    $image = new FileUpload($params['file']);
-
-    if ($image && $image->isOk() && $image->isImage()) {
+     $params['imageName'] = '';
+     if ($image && $image->isOk() && $image->isImage()) {
 
       //file path to upload dir
-      $uploadDir = './../data/uploads/';
-      $filePath = $uploadDir . '/' . $image->getSanitizedName();
+      $uploadDir = $this->petModel->uploadDir;
+      $fileName = uniqid('pet'). '.'. $image->getImageFileExtension();
+
+      $filePath = $uploadDir . '/' . $fileName;
 
       //move file 
       $image->move($filePath);
+      $params['imageName'] = $fileName;
     }
+
+     //create new pet in xml
+     $this->petModel->createPet($params);
 
     //send response
     $response = new JsonApiResponse(Response::S200_OK, 'Pet is created');

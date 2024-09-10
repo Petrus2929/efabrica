@@ -129,7 +129,9 @@ class PetModel extends EntityModel
             if ($pet['id'] !== $id) {
                 $this->addPetElement($xml, $pet);
             } else {
-                unlink($this->uploadDir . $pet['imageName']);
+                if (!empty($pet['imageName'])) {
+                    unlink($this->uploadDir . $pet['imageName']);
+                }
             }
         }
 

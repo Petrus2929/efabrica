@@ -1,1 +1,1 @@
-{"lastId":33,"entityName":"pets","entityItemName":"pet","uploadDir":".\/..\/data\/uploads\/","schema":{"type":"object","properties":{"name":{"type":"string"},"category":{"type":"string"},"status":{"type":"string"}}}}
+{"lastId":34,"entityName":"pets","entityItemName":"pet","uploadDir":".\/..\/data\/uploads\/","schema":{"type":"object","properties":{"name":{"type":"string"},"category":{"type":"string"},"status":{"type":"string"}}}}

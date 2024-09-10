@@ -21,7 +21,7 @@ Pre pridanie nového atribútu zvieratka ako napríklad 'age' je potrebné vykon
 
 ## Postup k inicializácii projektu a spusteniu aplikácie:
 ### 1. git clone https://github.com/Petrus2929/efabrica.git
-### 2. zmazanie celého priečinka efabrica/vendor a zamazanie súbora efabrica/composer.lock (dôvod: command composer install nevie stiahnúť nejaké súbory od tomaj api)
+### 2. zmazanie celého priečinka efabrica/nette-api/vendor a zamazanie súbora efabrica/nette-api/composer.lock (dôvod: command composer install nevie stiahnúť nejaké súbory od tomaj api)
 ### 3. presun do priečinka efabrica/nette-api a následné spustenie príkazu composer install  
 ### 4. presun do priečinka efabrica/client a následné spustenie príkazu npm install
 ### 5. spustenie príkazu 'php -S localhost:8000 -t www' v priečinku efabrica/nette-api
